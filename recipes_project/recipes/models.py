@@ -1,6 +1,4 @@
 from django.db import models
-
-from django.db import models
 from django.contrib.auth.models import User
 
 
@@ -20,8 +18,8 @@ class Recipe(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)  # Пользователь, который создал рецепт
     created_at = models.DateTimeField(auto_now_add=True)  # Дата создания рецепта
     ingredients = models.ManyToManyField(Ingredient)  # Связь многие ко многим с ингредиентами
-    preparation_time = models.PositiveIntegerField(
-        help_text="Время на приготовление (в минутах)")  # Время приготовления
+    preparation_time = models.PositiveIntegerField(help_text="Время на приготовление (в минутах)")  # Время приготовления
+    image = models.ImageField(upload_to='recipes_images/', blank=True, null=True)  # Изображение
 
     def __str__(self):
         return self.title
@@ -29,8 +27,7 @@ class Recipe(models.Model):
 
 # Модель шагов рецепта
 class Step(models.Model):
-    recipe = models.ForeignKey(Recipe, related_name='steps',
-                               on_delete=models.CASCADE)  # Рецепт, к которому относится шаг
+    recipe = models.ForeignKey(Recipe, related_name='steps', on_delete=models.CASCADE)  # Рецепт, к которому относится шаг
     step_number = models.PositiveIntegerField()  # Номер шага
     description = models.TextField()  # Описание шага
 
@@ -39,4 +36,3 @@ class Step(models.Model):
 
     def __str__(self):
         return f"Шаг {self.step_number} для {self.recipe.title}"
-
