@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Каталог рецептов</title>
 </head>
 <body>
     <h1>Каталог рецептов</h1>
+    <a href="{% url 'recipe_add' %}">Добавить рецепт</a> <!-- Ссылка для добавления рецепта -->
     <ul>
         {% for recipe in recipes %}
             <li>
@@ -13,9 +16,11 @@
                 {% if recipe.image %}
                     <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="150">
                 {% endif %}
+                <a href="{% url 'recipe_edit' recipe.id %}">Редактировать</a> <!-- Ссылка для редактирования рецепта -->
             </li>
         {% endfor %}
     </ul>
     <a href="/">На главную</a>
 </body>
 </html>
+
