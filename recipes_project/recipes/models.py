@@ -2,22 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# Модель ингредиента
-class Ingredient(models.Model):
-    name = models.CharField(max_length=200)  # Название ингредиента
-    description = models.TextField(blank=True)  # Описание (например, если ингредиент требует подготовки)
-
-    def __str__(self):
-        return self.name
-
-
 # Модель рецепта
 class Recipe(models.Model):
     title = models.CharField(max_length=200)  # Название рецепта
     description = models.TextField()  # Описание рецепта
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)  # Пользователь, который создал рецепт
     created_at = models.DateTimeField(auto_now_add=True)  # Дата создания рецепта
-    ingredients = models.ManyToManyField(Ingredient)  # Связь многие ко многим с ингредиентами
+    ingredients_text = models.TextField(help_text="Укажите ингредиенты с количеством (каждый с новой строки). Пример: 'Молоко - 200 мл'")  # Поле для ингредиентов
     preparation_time = models.PositiveIntegerField(help_text="Время на приготовление (в минутах)")  # Время приготовления
     image = models.ImageField(upload_to='recipes_images/', blank=True, null=True)  # Изображение
 

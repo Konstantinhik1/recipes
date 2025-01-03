@@ -10,17 +10,6 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-
-        <!-- Поля для добавления нового ингредиента и его граммовки -->
-        <p>
-            <label for="id_new_ingredient">Добавить новый ингредиент:</label>
-            <input type="text" name="new_ingredient" id="id_new_ingredient" placeholder="Название ингредиента">
-        </p>
-        <p>
-            <label for="id_ingredient_quantity">Количество (в граммах):</label>
-            <input type="number" name="ingredient_quantity" id="id_ingredient_quantity" placeholder="Количество">
-        </p>
-
         <button type="submit">Сохранить</button>
     </form>
     <a href="{% url 'recipe_catalog' %}">Назад к каталогу</a>
