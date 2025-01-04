@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,11 +19,15 @@
     <pre>{{ recipe.ingredients_text }}</pre>
 
     <h2>Шаги приготовления:</h2>
-    <ol>
-        {% for step in recipe.steps.all %}
-            <li>{{ step.description }}</li>
-        {% endfor %}
-    </ol>
+    {% if recipe.detailed_steps.all %}
+        <ol>
+            {% for step in recipe.detailed_steps.all %}
+                <li>{{ step.description }}</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>Шаги приготовления не указаны.</p>
+    {% endif %}
 
     <a href="/recipes/">Назад к каталогу</a>
 </body>
