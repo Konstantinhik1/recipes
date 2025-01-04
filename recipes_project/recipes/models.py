@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -11,17 +18,14 @@ class Recipe(models.Model):
     preparation_time = models.PositiveIntegerField(help_text="Время на приготовление (в минутах)")
     instructions = models.TextField(default="", help_text="Опишите шаги приготовления, разделенные новой строкой.")
     image = models.ImageField(upload_to='recipes_images/', blank=True, null=True)
+    categories = models.ManyToManyField(Category, related_name="recipes", blank=True)
 
     def __str__(self):
         return self.title
 
 
 class Step(models.Model):
-    recipe = models.ForeignKey(
-        Recipe,
-        related_name='detailed_steps',
-        on_delete=models.CASCADE
-    )
+    recipe = models.ForeignKey(Recipe, related_name='detailed_steps', on_delete=models.CASCADE)
     step_number = models.PositiveIntegerField()
     description = models.TextField()
 
@@ -30,3 +34,4 @@ class Step(models.Model):
 
     def __str__(self):
         return f"Шаг {self.step_number} для {self.recipe.title}"
+

@@ -8,18 +8,43 @@
 <body>
     <h1>Каталог рецептов</h1>
     <a href="{% url 'recipe_add' %}">Добавить рецепт</a>
+
+    <h2>Поиск по категориям</h2>
+    <form method="get" action="{% url 'recipe_catalog' %}">
+        {{ filter_form.category.label_tag }} {{ filter_form.category }}
+        <button type="submit">Найти</button>
+    </form>
+
+    <h2>Категории</h2>
     <ul>
-        {% for recipe in recipes %}
-            <li>
-                <a href="{{ recipe.id }}/">{{ recipe.title }}</a>
-                <p>Время приготовления: {{ recipe.preparation_time }} минут</p>
-                {% if recipe.image %}
-                    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="150">
-                {% endif %}
-                <a href="{% url 'recipe_edit' recipe.id %}">Редактировать</a>
-            </li>
+        {% for category in categories %}
+            <li>{{ category.name }}</li>
         {% endfor %}
     </ul>
+
+    <h2>Рецепты</h2>
+    <ul>
+        {% if recipes %}
+            {% for recipe in recipes %}
+                <li>
+                    <a href="{{ recipe.id }}/">{{ recipe.title }}</a>
+                    <p>Время приготовления: {{ recipe.preparation_time }} минут</p>
+                    <p>Категории:
+                        {% for category in recipe.categories.all %}
+                            {{ category.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% if recipe.image %}
+                        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="150">
+                    {% endif %}
+                    <a href="{% url 'recipe_edit' recipe.id %}">Редактировать</a>
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>Нет рецептов для выбранной категории.</p>
+        {% endif %}
+    </ul>
+
     <a href="/">На главную</a>
 </body>
 </html>

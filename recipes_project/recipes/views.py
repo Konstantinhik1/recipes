@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Recipe, Step
-from .forms import RecipeForm
+from .models import Recipe, Step, Category
+from .forms import RecipeForm, RecipeFilterForm
 
 
 def index(request):
@@ -9,7 +9,17 @@ def index(request):
 
 def recipe_catalog(request):
     recipes = Recipe.objects.all()
-    return render(request, 'recipes/recipe_catalog.html', {'recipes': recipes})
+    filter_form = RecipeFilterForm(request.GET)
+    if filter_form.is_valid() and filter_form.cleaned_data['category']:
+        category = filter_form.cleaned_data['category']
+        recipes = recipes.filter(categories=category)
+
+    categories = Category.objects.all()
+    return render(request, 'recipes/recipe_catalog.html', {
+        'recipes': recipes,
+        'categories': categories,
+        'filter_form': filter_form,
+    })
 
 
 def recipe_detail(request, recipe_id):
@@ -24,8 +34,9 @@ def recipe_add(request):
             recipe = form.save(commit=False)
             recipe.created_by = request.user
             recipe.save()
+            form.save_m2m()
 
-            steps = recipe.instructions.splitlines()  # Разделяем строки на шаги
+            steps = recipe.instructions.splitlines()
             for step_number, description in enumerate(steps, start=1):
                 if description.strip():
                     Step.objects.create(recipe=recipe, step_number=step_number, description=description)
@@ -41,14 +52,15 @@ def recipe_edit(request, recipe_id):
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
         if form.is_valid():
-            form.save()
+            recipe = form.save(commit=False)
+            recipe.save()
+            form.save_m2m()
 
-            recipe.detailed_steps.all().delete()  # Удаляем старые шаги
+            recipe.detailed_steps.all().delete()
             steps = recipe.instructions.splitlines()
             for step_number, description in enumerate(steps, start=1):
                 if description.strip():
                     Step.objects.create(recipe=recipe, step_number=step_number, description=description)
-
             return redirect('recipe_detail', recipe_id=recipe.id)
     else:
         form = RecipeForm(instance=recipe)
