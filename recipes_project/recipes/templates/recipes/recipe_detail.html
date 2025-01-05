@@ -7,28 +7,19 @@
 </head>
 <body>
     <h1>{{ recipe.title }}</h1>
-
+    <p>Время приготовления: {{ recipe.preparation_time }} минут</p>
+    <p>Описание: {{ recipe.description }}</p>
+    <p>Ингредиенты: {{ recipe.ingredients_text }}</p>
+    <p>Шаги приготовления:</p>
+    <ol>
+        {% for step in recipe.detailed_steps.all %}
+            <li>{{ step.description }}</li>
+        {% endfor %}
+    </ol>
     {% if recipe.image %}
-        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="300">
+        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="150">
     {% endif %}
-
-    <p><strong>Описание:</strong> {{ recipe.description }}</p>
-    <p><strong>Время приготовления:</strong> {{ recipe.preparation_time }} минут</p>
-
-    <h2>Ингредиенты:</h2>
-    <pre>{{ recipe.ingredients_text }}</pre>
-
-    <h2>Шаги приготовления:</h2>
-    {% if recipe.detailed_steps.all %}
-        <ol>
-            {% for step in recipe.detailed_steps.all %}
-                <li>{{ step.description }}</li>
-            {% endfor %}
-        </ol>
-    {% else %}
-        <p>Шаги приготовления не указаны.</p>
-    {% endif %}
-
-    <a href="/recipes/">Назад к каталогу</a>
+    <a href="{% url 'recipe_edit' recipe.id %}">Редактировать</a>
+    <a href="{% url 'recipe_catalog' %}">Назад к каталогу</a>
 </body>
 </html>

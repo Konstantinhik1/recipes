@@ -15,19 +15,12 @@
         <button type="submit">Найти</button>
     </form>
 
-    <h2>Категории</h2>
-    <ul>
-        {% for category in categories %}
-            <li>{{ category.name }}</li>
-        {% endfor %}
-    </ul>
-
     <h2>Рецепты</h2>
     <ul>
         {% if recipes %}
             {% for recipe in recipes %}
                 <li>
-                    <a href="{{ recipe.id }}/">{{ recipe.title }}</a>
+                    <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a>
                     <p>Время приготовления: {{ recipe.preparation_time }} минут</p>
                     <p>Категории:
                         {% for category in recipe.categories.all %}

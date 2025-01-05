@@ -14,10 +14,8 @@ def recipe_catalog(request):
         category = filter_form.cleaned_data['category']
         recipes = recipes.filter(categories=category)
 
-    categories = Category.objects.all()
     return render(request, 'recipes/recipe_catalog.html', {
         'recipes': recipes,
-        'categories': categories,
         'filter_form': filter_form,
     })
 
