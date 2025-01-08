@@ -7,4 +7,6 @@ urlpatterns = [
     path('recipe/add/', views.recipe_add, name='recipe_add'),  # Добавление рецепта
     path('recipe/<int:recipe_id>/', views.recipe_detail, name='recipe_detail'),  # Детали рецепта
     path('recipe/<int:recipe_id>/edit/', views.recipe_edit, name='recipe_edit'),  # Редактирование рецепта
+    path('review/<int:review_id>/edit/', views.review_edit, name='review_edit'),  # Редактирование отзыва
+    path('review/<int:review_id>/delete/', views.review_delete, name='review_delete'),  # Удаление отзыва
 ]

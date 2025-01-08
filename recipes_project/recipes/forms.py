@@ -32,7 +32,7 @@ class RecipeFilterForm(forms.Form):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['author', 'content']
+        fields = ['content']
         widgets = {
             'content': forms.Textarea(attrs={
                 'rows': 3,

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -17,7 +18,7 @@ class Recipe(models.Model):
     image = models.ImageField(upload_to='recipes/', blank=True, null=True)
     categories = models.ManyToManyField('Category', related_name='recipes')
     created_by = models.ForeignKey(
-        'auth.User',
+        User,
         on_delete=models.CASCADE,
         related_name='recipes'
     )
@@ -41,9 +42,9 @@ class Step(models.Model):
 
 class Review(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='reviews')
-    author = models.CharField(max_length=100)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Review by {self.author} on {self.recipe.title}"
+        return f"Review by {self.author.username} on {self.recipe.title}"
