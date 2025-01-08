@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Recipe, Step, Category
-from .forms import RecipeForm, RecipeFilterForm
+from .models import Recipe, Step, Category, Review
+from .forms import RecipeForm, RecipeFilterForm, ReviewForm
 
 
 def index(request):
@@ -22,7 +22,23 @@ def recipe_catalog(request):
 
 def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    return render(request, 'recipes/recipe_detail.html', {'recipe': recipe})
+    reviews = recipe.reviews.all()
+
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.recipe = recipe
+            review.save()
+            return redirect('recipe_detail', recipe_id=recipe.id)
+    else:
+        review_form = ReviewForm()
+
+    return render(request, 'recipes/recipe_detail.html', {
+        'recipe': recipe,
+        'reviews': reviews,
+        'review_form': review_form
+    })
 
 
 def recipe_add(request):

@@ -37,3 +37,13 @@ class Step(models.Model):
 
     def __str__(self):
         return f"Step {self.step_number} for {self.recipe.title}"
+
+
+class Review(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='reviews')
+    author = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Review by {self.author} on {self.recipe.title}"

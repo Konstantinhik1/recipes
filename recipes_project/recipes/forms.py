@@ -1,5 +1,5 @@
 from django import forms
-from .models import Recipe, Category
+from .models import Recipe, Category, Review
 
 
 class RecipeForm(forms.ModelForm):
@@ -27,3 +27,15 @@ class RecipeFilterForm(forms.Form):
         required=False,
         label="Выберите категорию"
     )
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['author', 'content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'rows': 3,
+                'placeholder': 'Напишите ваш отзыв'
+            }),
+        }

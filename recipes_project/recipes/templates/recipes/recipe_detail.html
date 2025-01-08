@@ -21,5 +21,24 @@
     {% endif %}
     <a href="{% url 'recipe_edit' recipe.id %}">Редактировать</a>
     <a href="{% url 'recipe_catalog' %}">Назад к каталогу</a>
+
+    <h2>Отзывы</h2>
+    <ul>
+        {% for review in reviews %}
+            <li>
+                <strong>{{ review.author }}</strong>: {{ review.content }}
+                <small>({{ review.created_at|date:"d.m.Y H:i" }})</small>
+            </li>
+        {% empty %}
+            <li>Отзывов пока нет.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Добавить отзыв</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ review_form.as_p }}
+        <button type="submit">Отправить</button>
+    </form>
 </body>
 </html>
