@@ -21,6 +21,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('recipes.urls')),  # Подключаем маршруты из приложения recipes
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', include('recipes.urls')),
+    path('users/', include('users.urls')),
+]
+
+# Добавляем маршруты для медиафайлов, только если DEBUG = True
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
