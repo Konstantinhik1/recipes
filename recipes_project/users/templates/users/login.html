@@ -6,18 +6,25 @@
 </head>
 <body>
     <h1>Авторизация</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Войти</button>
-    </form>
 
-    <!-- Ссылка на страницу регистрации -->
-    <a href="{% url 'register' %}">Зарегистрироваться</a>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-    <!-- Ссылка на главную страницу -->
-    <p>
-        <a href="{% url 'index' %}">На главную</a>
-    </p>
+    {% if user.is_authenticated %}
+        <p>Вы уже вошли как {{ user.username }}. <a href="{% url 'logout' %}">Выйти</a></p>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Войти</button>
+        </form>
+        <a href="{% url 'register' %}">Зарегистрироваться</a>
+        <p><a href="{% url 'index' %}">На главную</a></p>
+    {% endif %}
 </body>
 </html>
