@@ -104,3 +104,6 @@ STATIC_URL = '/static/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Укажите URL вашей страницы входа
+LOGIN_URL = '/users/login/'  # URL страницы входа для неавторизованных пользователей

@@ -1,15 +1,17 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden
 from .models import Recipe, Step, Category, Review
 from .forms import RecipeForm, RecipeFilterForm, ReviewForm
-from django.contrib.auth.decorators import login_required
 
 
 def index(request):
+    """Главная страница сайта."""
     return render(request, 'recipes/index.html', {'title': 'Главная страница сайта рецептов'})
 
 
 def recipe_catalog(request):
+    """Каталог рецептов с фильтрацией."""
     recipes = Recipe.objects.all()
     filter_form = RecipeFilterForm(request.GET)
     if filter_form.is_valid() and filter_form.cleaned_data['category']:
@@ -23,11 +25,12 @@ def recipe_catalog(request):
 
 
 def recipe_detail(request, recipe_id):
+    """Детальная страница рецепта с отзывами."""
     recipe = get_object_or_404(Recipe, id=recipe_id)
     reviews = Review.objects.filter(recipe=recipe)
     review_form = ReviewForm()
 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated:
         review_form = ReviewForm(request.POST)
         if review_form.is_valid():
             review = review_form.save(commit=False)
@@ -40,12 +43,12 @@ def recipe_detail(request, recipe_id):
         'recipe': recipe,
         'reviews': reviews,
         'review_form': review_form,
-        'user': request.user,  # Передаем текущего пользователя
     })
 
 
 @login_required
 def recipe_add(request):
+    """Добавление нового рецепта."""
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
@@ -67,6 +70,7 @@ def recipe_add(request):
 
 @login_required
 def recipe_edit(request, recipe_id):
+    """Редактирование рецепта."""
     recipe = get_object_or_404(Recipe, id=recipe_id)
     if recipe.created_by != request.user:
         return HttpResponseForbidden("Вы не можете редактировать этот рецепт.")
@@ -92,6 +96,7 @@ def recipe_edit(request, recipe_id):
 
 @login_required
 def review_edit(request, review_id):
+    """Редактирование отзыва."""
     review = get_object_or_404(Review, id=review_id)
     if review.author != request.user:
         return HttpResponseForbidden("Вы не можете редактировать этот отзыв.")
@@ -109,6 +114,7 @@ def review_edit(request, review_id):
 
 @login_required
 def review_delete(request, review_id):
+    """Удаление отзыва."""
     review = get_object_or_404(Review, id=review_id)
     if review.author != request.user:
         return HttpResponseForbidden("Вы не можете удалить этот отзыв.")
@@ -116,3 +122,18 @@ def review_delete(request, review_id):
     recipe_id = review.recipe.id
     review.delete()
     return redirect('recipe_detail', recipe_id=recipe_id)
+
+
+def login_required_redirect(view_func):
+    """Обёртка для проверки авторизации и перенаправления."""
+    def wrapped(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f'/users/login/?next={request.path}')
+        return view_func(request, *args, **kwargs)
+    return wrapped
+
+
+@login_required_redirect
+def recipe_protected_edit(request, recipe_id):
+    """Пример использования редиректа для проверки авторизации."""
+    return recipe_edit(request, recipe_id)
