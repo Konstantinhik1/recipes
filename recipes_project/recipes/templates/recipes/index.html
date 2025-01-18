@@ -1,22 +1,55 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'recipes/css/styles.css' %}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Добро пожаловать на сайт рецептов!</h1>
-    <p>Этот сайт поможет вам найти и сохранить ваши любимые рецепты.</p>
+    <div class="menu">
+        <div class="logo">
+            <img src="{% static 'recipes/img/logo1.png' %}" alt="Логотип">
+        </div>
+        <div class="menu_list">
+            <div class="list">
+                <a href="{% url 'index' %}">Главная</a>
+            </div>
+            <div class="list">
+                <a href="{% url 'recipe_catalog' %}">Рецепты</a>
+            </div>
+        </div>
+        <div class="menu_enter">
+            <div class="enter_img1">
+                <img class="enter_img" src="{% static 'recipes/img/user.svg' %}" alt="User">
+            </div>
+            <div class="list">
+                <a href="{% url 'login' %}">Войти</a>
+            </div>
+        </div>
+    </div>
 
-    <!-- Ссылка на страницу с рецептами -->
-    <p>
-        <a href="{% url 'recipe_catalog' %}">Перейти к рецептам</a>
-    </p>
-
-    <!-- Ссылка на страницу авторизации -->
-    <p>
-        <a href="{% url 'login' %}">Авторизация</a>
-    </p>
+    <div class="first_screen">
+        <div class="background_image">
+            <img class="enter_img" src="{% static 'recipes/img/background.png' %}" alt="User">
+        </div>
+        <div class="text_overlay">
+            <div class="title">
+                Готовьте с любовью, удивляйте вкусом!
+            </div>
+            <div class="sub_title">
+                На сайте собраны простые и вкусные рецепты, которые легко готовить даже новичкам. Каждое блюдо — это повод порадовать себя и близких. Делитесь своими впечатлениями, комментируйте и оставляйте свои рецепты — вместе мы создадим кулинарную историю!
+            </div>
+            <div>
+                <a class="button" href="{% url 'recipe_catalog' %}">Перейти к рецептам</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
+
+
+
