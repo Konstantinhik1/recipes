@@ -19,6 +19,11 @@ def register(request):
 
 
 def user_login(request):
+    if request.user.is_authenticated:  # Проверяем, если пользователь уже авторизован
+        # Если пользователь авторизован, выводим сообщение с предложением выйти
+        messages.info(request, "Вы уже вошли в систему.")
+        return render(request, 'users/login.html', {'user_logged_in': True})
+
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
         if form.is_valid():
