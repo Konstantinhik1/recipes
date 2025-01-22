@@ -10,27 +10,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <div class="menu">
-        <div class="logo">
-            <img src="{% static 'recipes/img/logo1.png' %}" alt="Логотип">
+    <div class="logo">
+        <img src="{% static 'recipes/img/logo1.png' %}" alt="Логотип">
+    </div>
+    <div class="menu_list">
+        <div class="list">
+            <a href="{% url 'index' %}">Главная</a>
         </div>
-        <div class="menu_list">
-            <div class="list">
-                <a href="{% url 'index' %}">Главная</a>
-            </div>
-            <div class="list">
-                <a href="{% url 'recipe_catalog' %}">Рецепты</a>
-            </div>
+        <div class="list">
+            <a href="{% url 'recipe_catalog' %}">Рецепты</a>
         </div>
-        <div class="menu_enter">
-            <div class="enter_img1">
+    </div>
+
+    <div class="menu_enter">
+        {% if user.is_authenticated %}
+
+            <div class="user">Привет, {{ user.username }}!</div>  <!-- Показываем имя текущего пользователя -->
+
+            <div class="exit">
+                <a href="#" class="exit-button" id="logoutButton">
+    <img src="{% static 'recipes/img/log_out.png' %}" alt="Выйти" class="exit-icon">
+</a>
+
+            </div>
+        {% else %}
+
+
+        <div class="enter_img1">
                 <img class="enter_img" src="{% static 'recipes/img/user.svg' %}" alt="User">
             </div>
             <div class="list">
                 <a href="{% url 'login' %}">Войти</a>
             </div>
-        </div>
+        {% endif %}
+
+
     </div>
+</div>
 
     <div class="first_screen">
         <div class="background_image">
@@ -48,9 +66,49 @@
             </div>
         </div>
     </div>
+
+    <div id="logoutModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <p>Вы действительно хотите выйти из системы?</p>
+        <div class="modal-buttons">
+            <button id="confirmLogout" class="button">Выйти</button>
+            <button id="cancelLogout" class="button">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const logoutButton = document.getElementById("logoutButton");
+        const logoutModal = document.getElementById("logoutModal");
+        const confirmLogout = document.getElementById("confirmLogout");
+        const cancelLogout = document.getElementById("cancelLogout");
+
+        // Показ модального окна
+        logoutButton.addEventListener("click", function (event) {
+            event.preventDefault(); // Предотвращаем переход по ссылке
+            logoutModal.style.display = "flex";
+        });
+
+        // Подтверждение выхода
+        confirmLogout.addEventListener("click", function () {
+            window.location.href = "{% url 'logout' %}"; // Перенаправляем на страницу выхода
+        });
+
+        // Отмена выхода
+        cancelLogout.addEventListener("click", function () {
+            logoutModal.style.display = "none"; // Закрываем модальное окно
+        });
+
+        // Закрытие окна при клике вне модального окна
+        window.addEventListener("click", function (event) {
+            if (event.target === logoutModal) {
+                logoutModal.style.display = "none";
+            }
+        });
+    });
+</script>
+
+
 </body>
 </html>
-
-
-
-

@@ -3,6 +3,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import RegisterForm, LoginForm
 from .models import UserSession
+from django.shortcuts import render
+
+def index(request):
+    # Проверка, авторизован ли пользователь
+    user_logged_in = request.user.is_authenticated
+    username = request.user.username if user_logged_in else None  # Имя пользователя, если он авторизован
+    return render(request, 'index.html', {'user_logged_in': user_logged_in, 'username': username})
 
 def register(request):
     if request.method == 'POST':
@@ -59,12 +66,6 @@ def user_login(request):
 
 
 def user_logout(request):
-    if request.user.is_authenticated:
-        user_session = UserSession.objects.filter(user=request.user).first()
-        if user_session:
-            user_session.is_logged_in = False
-            user_session.save()
-
     logout(request)
-    messages.success(request, "Вы успешно вышли из системы.")
-    return redirect('login')
+    return redirect('index')
+

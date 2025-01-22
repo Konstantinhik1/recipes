@@ -51,6 +51,27 @@ html, body {
     text-decoration: none;
 }
 
+.user {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: none;
+    align-items: center;
+    display: flex;
+    align-items: center
+}
+
+.exit {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.exit a {
+    color: white;
+    text-decoration: none;
+}
+
 .first_screen {
     position: relative;
     height: 100vh;
@@ -115,6 +136,110 @@ html, body {
     background-color: #7EB800;
 }
 
+.menu_enter .list span {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFFFFF;  /* Белый цвет для текста */
+}
+
+.exit-button {
+    position: relative; /* Устанавливаем относительное позиционирование для привязки подсказки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 50%;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.exit-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.exit-icon {
+    width: 24px;
+    height: 24px;
+    transition: filter 0.3s ease;
+}
+
+.exit-button:hover .exit-icon {
+    filter: brightness(1.5);
+}
+
+.exit-button::after {
+    content: "Выйти из системы"; /* Текст подсказки */
+    position: absolute;
+    bottom: -40px; /* Расстояние от кнопки до подсказки */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #191A1C; /* Цвет как у меню */
+    color: #FFFFFF; /* Белый текст */
+    padding: 8px 15px; /* Внутренние отступы */
+    border-radius: 10px; /* Закругленные края */
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap; /* Запрещает перенос текста */
+    opacity: 0; /* Невидимая подсказка по умолчанию */
+    pointer-events: none; /* Отключаем взаимодействие */
+    transition: opacity 0.3s ease; /* Плавное появление */
+    z-index: 3000; /* Чтобы подсказка была сверху */
+}
+
+.exit-button:hover::after {
+    opacity: 1; /* Появляется при наведении */
+}
 
 
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Выше чем меню */
+}
 
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 300px;
+}
+
+.modal-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.modal-buttons .button {
+    font-family: Montserrat;
+    font-weight: regular;
+    width: 100%;
+    height: 50px;
+    padding: 10px 20px;
+    background-color: #E8691B;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.modal-buttons .button:hover {
+    background-color: #7EB800;
+}
