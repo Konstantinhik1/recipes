@@ -64,7 +64,7 @@ html, body {
     margin-top: 100px; /* Создаем отступ сверху для контента, чтобы он не перекрывал меню */
 }
 
-.first_screen .enter_img {
+.background_image .enter_img {
     position: absolute;
     top: 0;
     left: 0;
@@ -114,4 +114,7 @@ html, body {
 .button:hover {
     background-color: #7EB800;
 }
+
+
+
 

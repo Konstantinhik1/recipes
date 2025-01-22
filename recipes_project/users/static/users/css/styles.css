@@ -2,22 +2,12 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat';
     overflow-x: hidden; /* Отключаем горизонтальную прокрутку */
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-.body {
-    background-image: url("{% static 'users/img/background.png' %}"); /* Укажите путь к изображению */
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.menu {
+    margin-right: 50px;
 }
 
 .logo {
@@ -31,7 +21,6 @@ html, body {
     height: 100px;
     padding: 0 120px;
     align-items: center;
-    margin-right: 50px;
     margin: 0;
     box-sizing: border-box;
     position: fixed; /* Закрепляем меню сверху */
@@ -62,176 +51,67 @@ html, body {
     text-decoration: none;
 }
 
-/* Подключаем шрифт Montserrat для всего текста */
-.form-container {
-    padding: 50px;
-    text-align: center;
-    border-radius: 30px; /* Скругление границ формы */
-    width: 344px;
-    background-color: #333333;
-}
-
-.form-container h1 {
-    color: white;
-    font-size: 36px;
-    margin-bottom: 20px;
-    text-align: left; /* Выровнять по левому краю */
-}
-
-.form-group {
-    margin-bottom: 20px;
+.first_screen {
     position: relative;
-}
-
-.form-group input {
+    height: 100vh;
     width: 100%;
-    padding: 10px 10px 10px 40px; /* Отступ для иконки */
-    font-size: 16px;
-    background-color: #444444;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 120px 0;
+    text-align: left;
+    overflow: hidden;
+    margin-top: 100px; /* Создаем отступ сверху для контента, чтобы он не перекрывал меню */
 }
 
-.form-group input:focus {
-    outline: none;
-    background-color: #444444;
-    border: 2px solid #7EB800; /* Выделение активного поля */
-}
-
-.form-group input::placeholder {
-    color: white;
-}
-
-.form-group input:focus::placeholder {
-    color: transparent;
-}
-
-/* Убираем цвет для выбранного поля логина */
-.form-group input:-webkit-autofill,
-.form-group input:-webkit-autofill:hover,
-.form-group input:-webkit-autofill:focus {
-    background-color: #444444 !important;
-    color: white !important;
-}
-
-.form-group .icon {
+.background_image .enter_img {
     position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-}
-
-.form-group .toggle-password {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
-
-
-.form-button {
-    font-family: 'Montserrat';
-    font-weight: bold;
-    width: 100%;
-    padding: 10px;
-    font-size: 20px;
-    background-color: #7EB800;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-transform: capitalize; /* Первая буква заглавная, остальные строчные */
-}
-
-.form-button:hover {
-    background-color: #6DA000;
-}
-
-.info-text {
-    margin-top: 20px;
-    font-size: 20px;
-    font-weight: regular;
-    color: white; /* Белый цвет для текста */
-    margin-bottom: 10px; /* Расстояние между текстом и ссылкой */
-}
-
-.info-link {
-    margin-top: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-    display: block;
-}
-
-.info-link:hover {
-    color: #7EB800; /* Ссылка становится зеленой при наведении */
-}
-
-/* Стиль для сообщений об ошибках */
-.messages {
-    margin-top: 20px;
-    text-align: left;
-}
-
-.message {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-.message.error {
-    color: #FF0000;
-    text-align: left;
-}
-
-.message.success {
-    color: #155724;
-    text-align: left;
-}
-
-
-.popup {
-    display: none;
-    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* затемнение фона */
+    object-fit: cover; /* Чтобы изображение покрывало весь экран */
+    z-index: -1;
+}
+
+.text_overlay {
+    position: relative;
+    z-index: 1;
+    color: white;
+}
+
+.title {
+    font-size: 54px;
+    font-weight: bold;
+    width: 50%;
+    margin-bottom: 20px;
+}
+
+.sub_title {
+    font-size: 20px;
+    font-weight: normal;
+    width: 50%;
+    margin-top: 20px;
+
+}
+
+.button {
+    width: 311px;
+    color: white;
+    border-radius: 230px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #E8691B;
+    height: 69px;
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Устанавливаем всплывающее окно на самый верхний слой */
-    display: flex; /* Используем flexbox для центрирования */
-}
-
-.popup-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 400px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.popup-button {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
     text-decoration: none;
-    border-radius: 5px;
+    transition: background-color 0.5s ease;
+    margin-top: 30px;
 }
 
-.popup-button:hover {
-    background-color: #45a049;
+.button:hover {
+    background-color: #7EB800;
 }
+
