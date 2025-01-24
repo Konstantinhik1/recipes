@@ -4,42 +4,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="stylesheet" href="{% static 'recipes/css/styles2.css' %}"/>
+    <link rel="stylesheet" href="{% static 'recipes/css/styles2.css' %}"/>
     <title>Каталог рецептов</title>
+    <link rel='shortcut icon' type='image/x-icon' href='recipes/img/icon.png'/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <h1>Каталог рецептов</h1>
-    <a href="{% url 'recipe_add' %}">Добавить рецепт</a>
+<div class="menu">
+    <div class="logo">
+        <img src="{% static 'recipes/img/logo1.png' %}" alt="Логотип">
+    </div>
+    <div class="menu_list">
+        <div class="list">
+            <a href="{% url 'index' %}">Главная</a>
+        </div>
+        <div class="list">
+            <a href="{% url 'recipe_catalog' %}">Рецепты</a>
+        </div>
+    </div>
 
-    <h2>Поиск по категориям</h2>
-    <form method="get" action="{% url 'recipe_catalog' %}">
-        {{ filter_form.category.label_tag }} {{ filter_form.category }}
-        <button type="submit">Найти</button>
-    </form>
+    <div class="menu_enter">
+        {% if user.is_authenticated %}
 
-    <h2>Рецепты</h2>
-    <ul>
-        {% if recipes %}
-            {% for recipe in recipes %}
-                <li>
+            <div class="user">
+                Привет, {{ user.username }}!
+            </div>  <!-- Показываем имя текущего пользователя -->
+
+            <div class="exit">
+                <a href="#" class="exit-button" id="logoutButton">
+                    <img src="{% static 'recipes/img/log_out.png' %}" alt="Выйти" class="exit-icon">
+                </a>
+            </div>
+        {% else %}
+
+
+        <div class="enter_img1">
+                <img class="enter_img" src="{% static 'recipes/img/user.svg' %}" alt="User">
+            </div>
+            <div class="list">
+                <a href="{% url 'login' %}">Войти</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="content">
+    <div class="title">Рецепты</div>
+    <div class="function">
+
+    <form method="get" action="{% url 'recipe_catalog' %}" class="filter_form">
+    <select name="category" class="category_select">
+        <option value="" disabled selected>Выберите категорию</option>
+        {% for choice in filter_form.category.field.choices %}
+            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="add_button">Найти</button>
+</form>
+        <a href="{% url 'recipe_add' %}" class="button">
+            <div class="add_button">
+                <img src="{% static 'recipes/img/plusw.png' %}" alt="Выйти" class="add_icon">
+                Добавить рецепт
+            </div>
+        </a>
+    </div>
+            <div class="cards">
+    {% if recipes %}
+        {% for recipe in recipes %}
+            <div class="card">
+
+                        <a href="{% url 'recipe_detail' recipe.id %}">
+                           <div class="photo">
+                    {% if recipe.image %}
+
+                            <img class="photo" src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="150">
+                        {% endif %}
+                </div>
+                        </a>
+
+                <div class="name">
                     <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a>
-                    <p>Время приготовления: {{ recipe.preparation_time }} минут</p>
-                    <p>Категории:
+                </div>
+                <div class="type">
+                    <div class="cook_time">
+                        <img src="{% static 'recipes/img/hat.png' %}" alt="Категория" class="add_icon">
                         {% for category in recipe.categories.all %}
                             {{ category.name }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
-                    </p>
-                    {% if recipe.image %}
-                        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="150">
-                    {% endif %}
-                    <a href="{% url 'recipe_edit' recipe.id %}">Редактировать</a>
-                </li>
-            {% endfor %}
-        {% else %}
-            <p>Нет рецептов для выбранной категории.</p>
-        {% endif %}
-    </ul>
+                    </div>
+                    <div class="dish_type">
+                        <img src="{% static 'recipes/img/time.png' %}" alt="Время приготовления" class="add_icon">
+                        {{ recipe.preparation_time }} мин.
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Нет рецептов для выбранной категории.</p>
+    {% endif %}
+</div>
+</div>
 
-    <a href="/">На главную</a>
+<div class="footer">
+    <div class="footer_content">
+        <div class="image">
+                <img src="{% static 'recipes/img/logo1.png' %}" alt="Логотип">
+        </div>
+        <div class="links">
+            <div class="link_menu">
+                <div class="link_title">Меню:</div>
+                <div class="link_point"><a href="{% url 'index' %}">Главная</a></div>
+                <div class="link_point"><a href="{% url 'recipe_catalog' %}">Рецепты</a></div>
+            </div>
+            <div class="link_contacts">
+                <div class="link_title">Контакты:</div>
+                <div class="link_point">Foodgood@gmail.com</div>
+                <div class="link_point">+375 (44) 589 254 78</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="footer_rights">
+        Все права защищены
+    </div>
+</div>
+
+    <div id="logoutModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <p>Вы действительно хотите выйти из системы?</p>
+        <div class="modal-buttons">
+            <button id="confirmLogout" class="e_button">Выйти</button>
+            <button id="cancelLogout" class="e_button">Отмена</button>
+        </div>
+    </div>
+</div>
+
+    {% if messages %}
+<div id="notification" class="notification">
+    {% for message in messages %}
+        <p class="notification-message">{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const logoutButton = document.getElementById("logoutButton");
+        const logoutModal = document.getElementById("logoutModal");
+        const confirmLogout = document.getElementById("confirmLogout");
+        const cancelLogout = document.getElementById("cancelLogout");
+
+        // Показ модального окна
+        logoutButton.addEventListener("click", function (event) {
+            event.preventDefault(); // Предотвращаем переход по ссылке
+            logoutModal.style.display = "flex";
+        });
+
+        // Подтверждение выхода
+        confirmLogout.addEventListener("click", function () {
+            window.location.href = "{% url 'logout' %}"; // Перенаправляем на страницу выхода
+        });
+
+        // Отмена выхода
+        cancelLogout.addEventListener("click", function () {
+            logoutModal.style.display = "none"; // Закрываем модальное окно
+        });
+
+        // Закрытие окна при клике вне модального окна
+        window.addEventListener("click", function (event) {
+            if (event.target === logoutModal) {
+                logoutModal.style.display = "none";
+            }
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const notification = document.getElementById("notification");
+        if (notification) {
+            // Удаляем уведомление через 3 секунды
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 3000);
+        }
+    });
+</script>
+
 </body>
 </html>
