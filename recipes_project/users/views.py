@@ -6,9 +6,8 @@ from .models import UserSession
 from django.shortcuts import render
 
 def index(request):
-    # Проверка, авторизован ли пользователь
     user_logged_in = request.user.is_authenticated
-    username = request.user.username if user_logged_in else None  # Имя пользователя, если он авторизован
+    username = request.user.username if user_logged_in else None
     return render(request, 'index.html', {'user_logged_in': user_logged_in, 'username': username})
 
 def register(request):
@@ -19,15 +18,14 @@ def register(request):
             messages.success(request, "Вы успешно зарегистрировались!")
             return redirect('login')
         else:
-            messages.error(request, "Ошибка регистрации. Проверьте введенные данные.")
+            messages.error(request, "Произошла ошибка при регистрации. Проверьте данные.")
     else:
         form = RegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
 
 def user_login(request):
-    if request.user.is_authenticated:  # Проверяем, если пользователь уже авторизован
-        # Если пользователь авторизован, выводим сообщение с предложением выйти
+    if request.user.is_authenticated:
         messages.info(request, "Вы уже вошли в систему.")
         return render(request, 'users/login.html', {'user_logged_in': True})
 
@@ -39,26 +37,20 @@ def user_login(request):
                 password=form.cleaned_data['password']
             )
             if user is not None:
-                # Проверка сессии
                 user_session, created = UserSession.objects.get_or_create(user=user)
                 if user_session.is_logged_in:
                     messages.error(request, "Этот пользователь уже авторизован в системе.")
                     return redirect('login')
                 else:
-                    # Завершаем все активные сессии
-                    UserSession.objects.filter(is_logged_in=True).update(is_logged_in=False)
-
-                    # Устанавливаем текущую сессию как активную
+                    UserSession.objects.filter(user=user, is_logged_in=True).update(is_logged_in=False)
                     user_session.is_logged_in = True
                     user_session.save()
-
                     login(request, user)
-                    messages.success(request, "Вы успешно вошли!")
-                    return redirect('index')  # Перенаправление на главную
+                    return redirect('index')
             else:
                 messages.error(request, "Неверное имя пользователя или пароль.")
         else:
-            messages.error(request, "Ошибка в форме. Проверьте данные.")
+            messages.error(request, "Неверное имя пользователя или пароль.")
     else:
         form = LoginForm()
 
@@ -66,6 +58,8 @@ def user_login(request):
 
 
 def user_logout(request):
+    user = request.user
+    UserSession.objects.filter(user=user, is_logged_in=True).update(is_logged_in=False)
     logout(request)
+    messages.success(request, "Вы успешно покинули систему.")
     return redirect('index')
-

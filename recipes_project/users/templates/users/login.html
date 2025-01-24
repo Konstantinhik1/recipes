@@ -79,17 +79,19 @@
 
 <!-- Общие ошибки -->
 {% if messages %}
-    <div class="error-message">
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    </div>
-{% endif %}
+        <div class="error-message">
+            {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <p>{{ message }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
 
 <button type="submit" class="form-button">Войти</button>
             </form>
             <div class="links">
-                <div class="info-text">Уже есть аккаунт?</div>
+                <div class="info-text">Еще нет аккаунта?</div>
                 <a href="{% url 'register' %}" class="info-link">Зарегистрироваться</a>
             </div>
         </div>

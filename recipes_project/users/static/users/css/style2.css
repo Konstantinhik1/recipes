@@ -1,0 +1,218 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Montserrat';
+    overflow-x: hidden;
+}
+
+.menu {
+    margin-right: 50px;
+}
+
+.logo {
+    margin-right: 50px;
+}
+
+.menu {
+    display: flex;
+    width: 100%;
+    background-color: #191A1C;
+    height: 100px;
+    padding: 0 120px;
+    align-items: center;
+    margin: 0;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.menu_list {
+    display: flex;
+    gap: 30px;
+}
+
+.menu_enter {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.list {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.list a {
+    color: white;
+    text-decoration: none;
+}
+
+.first_screen {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    margin-top: 100px;
+    overflow: hidden;
+}
+
+.background_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+.background_image .enter_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.background_overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.text_overlay {
+    position: relative;
+    z-index: 1;
+    color: white;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 50px;
+    text-align: center;
+    background-color: #333333;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    position: relative;
+    max-width: 454px;
+    width: 100%;
+    border-radius: 30px;
+    margin: 0 auto;
+}
+
+.title {
+    text-align: left;
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #444444;
+    border-radius: 5px;
+    padding: 10px;
+    gap: 10px;
+    box-sizing: border-box;
+    position: relative; /* Устанавливаем систему координат */
+}
+
+.input-wrapper input {
+    flex: 1;
+    font-family: Montserrat;
+    font-size: 16px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    outline: none;
+}
+
+.input-wrapper img.icon {
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+    position: absolute; /* Абсолютное позиционирование для привязки к input */
+    left: 10px; /* Смещение для размещения в поле */
+    top: 50%;
+    transform: translateY(-50%); /* Центрирование по вертикали относительно input */
+}
+
+
+.input-wrapper .toggle-password {
+    cursor: pointer;
+}
+
+.error-message {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: left;
+    min-height: 20px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.error-message p {
+    margin: 0;
+}
+
+.form-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #7EB800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Montserrat;
+}
+
+.form-button:hover {
+    background-color: #6DA000;
+}
+
+.links {
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.info-text {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.info-link {
+    font-size: 20px;
+    text-decoration: none;
+    color: #FFFFFF;
+    width: 100%;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.info-link:hover {
+    color: #7EB800;
+}
