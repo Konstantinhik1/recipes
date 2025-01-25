@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'recipes/css/styles2.css' %}"/>
+    <link rel="stylesheet" href="{% static 'recipes/css/recipe_catalog.css' %}"/>
     <title>Каталог рецептов</title>
     <link rel='shortcut icon' type='image/x-icon' href='recipes/img/icon.png'/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -119,8 +119,8 @@
             </div>
             <div class="link_contacts">
                 <div class="link_title">Контакты:</div>
-                <div class="link_point">Foodgood@gmail.com</div>
-                <div class="link_point">+375 (44) 589 254 78</div>
+                <div class="link_point"><a href="mailto:Foodgood@gmail.com">Foodgood@gmail.com</a></div>
+                <div class="link_point"><a href="tel:+3754458925478">+375 (44) 589 254 78</a></div>
             </div>
 
         </div>
@@ -130,13 +130,13 @@
     </div>
 </div>
 
-    <div id="logoutModal" class="modal" style="display: none;">
+<div id="logoutModal" class="modal" style="display: none;">
     <div class="modal-content">
         <p>Вы действительно хотите выйти из системы?</p>
-        <div class="modal-buttons">
-            <button id="confirmLogout" class="e_button">Выйти</button>
-            <button id="cancelLogout" class="e_button">Отмена</button>
-        </div>
+            <div class="modal-buttons">
+                <button id="confirmLogout" class="modal-button confirm">Выйти</button>
+                <button id="cancelLogout" class="modal-button cancel">Отмена</button>
+            </div>
     </div>
 </div>
 
@@ -147,7 +147,6 @@
     {% endfor %}
 </div>
 {% endif %}
-
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

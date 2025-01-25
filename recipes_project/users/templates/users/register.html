@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
     <link rel='shortcut icon' type='image/x-icon' href='recipes/img/icon.png'/>
-    <link rel="stylesheet" href="{% static 'users/css/style2.css' %}"/>
+    <link rel="stylesheet" href="{% static 'users/css/register.css' %}"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 
@@ -54,10 +54,8 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                        <div class="input-wrapper">
-                            <img class="icon" src="{% static 'users/img/login.png' %}" alt="User">
-                            <input type="text" name="username" placeholder="Логин" value="{{ form.username.value|default:'' }}" required>
-                        </div>
+                        <img class="icon" src="{% static 'users/img/login.png' %}" alt="User">
+                        <input type="text" name="username" placeholder="Логин" value="{{ form.username.value|default:'' }}" required>
                     </div>
                         {% if form.username.errors %}
                             <div class="error-message">
@@ -68,9 +66,8 @@
                         {% endif %}
 
                     <div class="form-group">
-                        <div class="input-wrapper">
-                            <img class="icon" src="{% static 'users/img/e-mail.svg' %}" alt="Email">
-                            <input type="email" name="email" placeholder="E-mail" value="{{ form.email.value|default:'' }}" required>
+                        <img class="icon" src="{% static 'users/img/e-mail.svg' %}" alt="Email">
+                        <input type="email" name="email" placeholder="E-mail" value="{{ form.email.value|default:'' }}" required>
                         </div>
                         {% if form.email.errors %}
                             <div class="error-message">
@@ -79,13 +76,11 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                    </div>
+
                     <div class="form-group">
-                        <div class="input-wrapper">
-                            <img class="icon" src="{% static 'users/img/key.png' %}" alt="Key">
-                            <input type="password" id="password1-field" name="password1" placeholder="Пароль" required>
-                            <img id="toggle-password1-icon" class="toggle-password" onclick="togglePassword('password1-field', 'toggle-password1-icon')" src="{% static 'users/img/eye.png' %}" alt="Show/Hide Password">
-                        </div>
+                        <img class="icon" src="{% static 'users/img/key.png' %}" alt="Key">
+                        <input type="password" id="password1-field" name="password1" placeholder="Пароль" required>
+                        <img id="toggle-password1-icon" class="toggle-password" onclick="togglePassword('password1-field', 'toggle-password1-icon')" src="{% static 'users/img/eye.png' %}" alt="Show/Hide Password">
                     </div>
                         {% if form.password1.errors %}
                             <div class="error-message">
@@ -96,12 +91,10 @@
                         {% endif %}
 
                     <div class="form-group">
-                        <div class="input-wrapper">
-                            <img class="icon" src="{% static 'users/img/key.png' %}" alt="Key">
-                            <input type="password" id="password2-field" name="password2" placeholder="Подтвердите пароль" required>
-                            <img id="toggle-password2-icon" class="toggle-password" onclick="togglePassword('password2-field', 'toggle-password2-icon')" src="{% static 'users/img/eye.png' %}" alt="Show/Hide Password">
-                        </div>
-                        </div>
+                        <img class="icon" src="{% static 'users/img/key.png' %}" alt="Key">
+                        <input type="password" id="password2-field" name="password2" placeholder="Подтвердите пароль" required>
+                        <img id="toggle-password2-icon" class="toggle-password" onclick="togglePassword('password2-field', 'toggle-password2-icon')" src="{% static 'users/img/eye.png' %}" alt="Show/Hide Password">
+                    </div>
                         {% if form.password2.errors %}
                             <div class="error-message">
                                 {% for error in form.password2.errors %}
@@ -145,5 +138,3 @@
 </body>
 
 </html>
-
-
