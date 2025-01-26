@@ -506,7 +506,7 @@ a.button {
     }
 
     .reviews li {
-        padding: 10px;
+        padding-bottom: 10px;
         border-bottom: 1px solid #ddd;
         margin-bottom: 10px;
     }
@@ -522,7 +522,7 @@ a.button {
     }
 
     .reviews li a {
-        margin-left: 10px;
+        margin-right: 10px;
         font-size: 14px;
         color: #007BFF;
         text-decoration: none;
@@ -581,6 +581,42 @@ a.button {
     }
 
 
+    .modal {
+        display: none; /* Скрыто по умолчанию */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4); /* Черный фон с прозрачностью */
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 400px;
+    }
+.modal-button {
+    font-family: Montserrat;
+    font-weight: bold;
+    width: 100%;
+    height: 50px;
+    padding: 10px 20px;
+    background-color: #E8691B; /* Новый цвет для кнопок в модальном окне */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 30px;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+}
 
+.modal-button:hover {
+    background-color: #7EB800; /* Цвет кнопки при наведении */
+}
 
 

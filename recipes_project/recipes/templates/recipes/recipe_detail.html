@@ -93,16 +93,17 @@
         {% endfor %}
     </ol>
         </div>
-        <div class="subtitle">Отзывы</div>
+<div class="subtitle">Отзывы</div>
 <div class="reviews">
     <ul>
         {% for review in reviews %}
             <li>
-                <strong>{{ review.author.username }}</strong>: {{ review.content }}
-                <small>({{ review.created_at|date:"d.m.Y H:i" }})</small>
+                <strong>{{ review.author.username }}</strong>
+                <small>{{ review.created_at|date:"d.m.Y" }}</small>
+                <p class="review-text">{{ review.content }}</p>
                 {% if review.author == user %}
                     <a href="{% url 'review_edit' review.id %}">Редактировать</a>
-                    <a href="{% url 'review_delete' review.id %}">Удалить</a>
+                    <a href="{% url 'review_delete' review.id %}" class="delete-link">Удалить</a>
                 {% endif %}
             </li>
         {% empty %}
@@ -116,6 +117,8 @@
         <button type="submit">Отправить</button>
     </form>
 </div>
+
+
 </div>
 
 
@@ -161,6 +164,18 @@
 </div>
 {% endif %}
 
+<!-- Модальное окно подтверждения -->
+<div id="confirmModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <p>Вы действительно хотите удалите отзыв?</p>
+            <div class="modal-buttons">
+                <button id="deleteBtn" class="modal-button confirm">Удалить</button>
+                <button id="cancelBtn" class="modal-button cancel">Отмена</button>
+            </div>
+    </div>
+</div>
+
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const logoutButton = document.getElementById("logoutButton");
@@ -202,6 +217,29 @@
             }, 3000);
         }
     });
+
+
+    document.querySelectorAll('.delete-link').forEach(function(link) {
+    link.addEventListener('click', function(event) {
+        event.preventDefault(); // Отменяем стандартное поведение ссылки
+
+        // Показываем модальное окно
+        document.getElementById('confirmModal').style.display = 'block';
+
+        // Сохраняем ссылку для удаления
+        const deleteUrl = link.href;
+
+        // Обработчик кнопки "Удалить"
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            window.location.href = deleteUrl; // Переход по ссылке удаления
+        });
+
+        // Обработчик кнопки "Отменить"
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            document.getElementById('confirmModal').style.display = 'none'; // Скрыть модальное окно
+        });
+    });
+});
 </script>
 </body>
 </html>
