@@ -12,7 +12,7 @@ class Category(models.Model):
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    ingredients_text = models.TextField()
+    ingredients_text = models.TextField(help_text="Список ингредиентов, каждый ингредиент на новой строке")
     instructions = models.TextField()  # Поле для инструкций
     preparation_time = models.IntegerField()
     image = models.ImageField(upload_to='recipes/', blank=True, null=True)

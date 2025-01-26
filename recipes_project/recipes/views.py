@@ -3,6 +3,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden
 from .models import Recipe, Step, Category, Review
 from .forms import RecipeForm, RecipeFilterForm, ReviewForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
+from .models import Review
 
 
 def index(request):
@@ -137,3 +141,24 @@ def login_required_redirect(view_func):
 def recipe_protected_edit(request, recipe_id):
     """Пример использования редиректа для проверки авторизации."""
     return recipe_edit(request, recipe_id)
+
+
+@csrf_exempt  # Использование CSRF-защиты в реальных проектах обязательно
+def update_review(request, review_id):
+    if request.method == 'POST':
+        # Получаем отзыв по id
+        review = get_object_or_404(Review, id=review_id)
+
+        # Получаем новый текст отзыва
+        new_content = request.POST.get('content')
+
+        if new_content:
+            # Обновляем содержимое отзыва
+            review.content = new_content
+            review.save()
+
+            # Возвращаем успешный ответ
+            return JsonResponse({'success': True})
+
+    # В случае ошибок возвращаем ошибку
+    return JsonResponse({'success': False})

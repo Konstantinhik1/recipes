@@ -70,10 +70,12 @@
                 </div>
                 </div>
                 <a href="{% url 'recipe_edit' recipe.id %}" class="button">
-                    <div class="add_button">
-                        <img src="{% static 'recipes/img/edit.png' %}" alt="Выйти" class="add_icon">
-                        Редактировать
-                        </div>
+                {% if user.is_authenticated and user == recipe.created_by %}
+    <a href="{% url 'recipe_edit' recipe.id %}" class="add_button">
+        <img src="{% static 'recipes/img/edit.png' %}" alt="Редактировать" class="add_icon">
+        Редактировать
+    </a>
+{% endif %}
                 </a>
 
             </div>
@@ -82,7 +84,9 @@
             <div class="text">{{ recipe.description }}</div>
         </div>
             <div class="subtitle">Ингридиенты</div>
-            <div class="text">{{ recipe.ingredients_text }}</div>
+            <div class="text">
+                {{ recipe.ingredients_text|linebreaksbr }}
+            </div>
         </div>
     </div>
         <div class="subtitle">Шаги приготовления</div>
@@ -97,12 +101,22 @@
 <div class="reviews">
     <ul>
         {% for review in reviews %}
-            <li>
+            <li id="review-{{ review.id }}">
                 <strong>{{ review.author.username }}</strong>
                 <small>{{ review.created_at|date:"d.m.Y" }}</small>
-                <p class="review-text">{{ review.content }}</p>
+
+                <!-- Отображение текста отзыва -->
+                <p id="review-text-{{ review.id }}" class="review-text">{{ review.content }}</p>
+
+                <!-- Поле для редактирования отзыва -->
+                <div class="review-edit-container">
+                    <textarea id="review-edit-text-{{ review.id }}" class="review-edit" style="display:none;">{{ review.content }}</textarea>
+                    <button id="save-button-{{ review.id }}" class="save-button" onclick="saveReview({{ review.id }})" style="display:none;">Сохранить</button>
+                </div>
+
+                <!-- Кнопки редактирования и сохранения -->
                 {% if review.author == user %}
-                    <a href="{% url 'review_edit' review.id %}">Редактировать</a>
+                    <button id="edit-button-{{ review.id }}" class="edit-button" onclick="editReview({{ review.id }})">Редактировать</button>
                     <a href="{% url 'review_delete' review.id %}" class="delete-link">Удалить</a>
                 {% endif %}
             </li>
@@ -117,6 +131,8 @@
         <button type="submit">Отправить</button>
     </form>
 </div>
+
+
 
 
 </div>
@@ -240,6 +256,99 @@
         });
     });
 });
+
+
+
+
+
+
+
+
+// Функция для редактирования отзыва
+function editReview(reviewId) {
+    var textElement = document.getElementById('review-text-' + reviewId);
+    var textareaElement = document.getElementById('review-edit-text-' + reviewId);
+    var editButton = document.getElementById('edit-button-' + reviewId);
+    var saveButton = document.getElementById('save-button-' + reviewId);
+
+    // Скрытие текста и отображение поля для редактирования
+    textElement.style.display = 'none';
+    textareaElement.style.display = 'block';
+    editButton.style.display = 'none';
+    saveButton.style.display = 'block';
+}
+
+// Функция для сохранения изменений отзыва
+function saveReview(reviewId) {
+    var reviewText = document.getElementById('review-edit-text-' + reviewId).value;
+    var csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+    // Создаем форму и отправляем с помощью XMLHttpRequest
+    var formData = new FormData();
+    formData.append('content', reviewText);
+    formData.append('csrfmiddlewaretoken', csrfToken);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', `/reviews/${reviewId}/update/`, true);
+    xhr.setRequestHeader('X-CSRFToken', csrfToken); // Необходимо для отправки CSRF токена
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            // Если все прошло успешно, обновляем текст отзыва на странице
+            var response = JSON.parse(xhr.responseText);
+            if (response.success) {
+                var textElement = document.getElementById('review-text-' + reviewId);
+                var textareaElement = document.getElementById('review-edit-text-' + reviewId);
+                var editButton = document.getElementById('edit-button-' + reviewId);
+                var saveButton = document.getElementById('save-button-' + reviewId);
+
+                textElement.textContent = reviewText;
+                textElement.style.display = 'block';
+                textareaElement.style.display = 'none';
+                editButton.style.display = 'block';
+                saveButton.style.display = 'none';
+            } else {
+                alert('Ошибка сохранения');
+            }
+        } else {
+            alert('Ошибка сервера');
+        }
+    };
+    xhr.send(formData);
+}
+
+
+
+
+    function editReview(reviewId) {
+    // Скрываем кнопку "Редактировать"
+    document.getElementById(`edit-button-${reviewId}`).style.display = 'none';
+    // Показываем кнопку "Сохранить"
+    document.getElementById(`save-button-${reviewId}`).style.display = 'inline-block';
+    // Показываем поле редактирования (textarea)
+    document.getElementById(`review-edit-text-${reviewId}`).style.display = 'block';
+    // Скрываем текст отзыва
+    document.getElementById(`review-text-${reviewId}`).style.display = 'none';
+}
+
+function saveReview(reviewId) {
+    // Получаем текст из поля редактирования
+    const editedText = document.getElementById(`review-edit-text-${reviewId}`).value;
+
+    // Скрываем кнопку "Сохранить"
+    document.getElementById(`save-button-${reviewId}`).style.display = 'none';
+    // Показываем кнопку "Редактировать"
+    document.getElementById(`edit-button-${reviewId}`).style.display = 'inline-block';
+    // Показываем текст отзыва
+    document.getElementById(`review-text-${reviewId}`).innerText = editedText;
+    document.getElementById(`review-text-${reviewId}`).style.display = 'block';
+    // Скрываем поле редактирования
+    document.getElementById(`review-edit-text-${reviewId}`).style.display = 'none';
+
+    // Здесь добавьте логику для сохранения отредактированного отзыва на сервере
+    // Например, через AJAX запрос
+}
+
+
 </script>
 </body>
 </html>
