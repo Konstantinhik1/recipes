@@ -1,11 +1,55 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'recipes/css/recipe_form.css' %}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
+<div class="menu">
+    <div class="logo">
+        <img src="{% static 'recipes/img/logo1.png' %}" alt="Логотип">
+    </div>
+    <div class="menu_list">
+        <div class="list">
+            <a href="{% url 'index' %}">Главная</a>
+        </div>
+        <div class="list">
+            <a href="{% url 'recipe_catalog' %}">Рецепты</a>
+        </div>
+    </div>
+
+    <div class="menu_enter">
+        {% if user.is_authenticated %}
+
+            <div class="user">
+                Привет, {{ user.username }}!
+            </div>  <!-- Показываем имя текущего пользователя -->
+
+            <div class="exit">
+                <a href="#" class="exit-button" id="logoutButton">
+                    <img src="{% static 'recipes/img/log_out.png' %}" alt="Выйти" class="exit-icon">
+                </a>
+            </div>
+        {% else %}
+
+
+        <div class="enter_img1">
+                <img class="enter_img" src="{% static 'recipes/img/user.svg' %}" alt="User">
+            </div>
+            <div class="list">
+                <a href="{% url 'login' %}">Войти</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+    <div class="content">
+    <div class="title">{{ recipe.title }}</div>
     <h1>{{ title }}</h1>
 
     <form method="post" enctype="multipart/form-data">
@@ -16,5 +60,31 @@
     </form>
 
     <a href="{% url 'recipe_catalog' %}">Назад к каталогу</a>
+
+
+</div>
+<div class="footer">
+    <div class="footer_content">
+        <div class="image">
+                <img src="{% static 'recipes/img/logo1.png' %}" alt="Логотип">
+        </div>
+        <div class="links">
+            <div class="link_menu">
+                <div class="link_title">Меню:</div>
+                <div class="link_point"><a href="{% url 'index' %}">Главная</a></div>
+                <div class="link_point"><a href="{% url 'recipe_catalog' %}">Рецепты</a></div>
+            </div>
+            <div class="link_contacts">
+                <div class="link_title">Контакты:</div>
+                <div class="link_point"><a href="mailto:Foodgood@gmail.com">Foodgood@gmail.com</a></div>
+                <div class="link_point"><a href="tel:+3754458925478">+375 (44) 589 254 78</a></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="footer_rights">
+        Все права защищены
+    </div>
+</div>
 </body>
 </html>

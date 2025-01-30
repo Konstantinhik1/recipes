@@ -7,6 +7,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from .models import Review
+from django.contrib import messages
+from django.urls import reverse
 
 
 def index(request):
@@ -99,13 +101,18 @@ def recipe_edit(request, recipe_id):
 
 @login_required
 def recipe_delete(request, recipe_id):
-    """Удаление рецепта."""
+    """Удаление рецепта с редиректом и всплывающим уведомлением."""
+    if request.method != "POST":  # Только POST-запрос
+        return JsonResponse({"success": False, "error": "Только POST-запросы разрешены"}, status=400)
+
     recipe = get_object_or_404(Recipe, id=recipe_id)
     if recipe.created_by != request.user:
-        return HttpResponseForbidden("Вы не можете удалить этот рецепт.")
+        return JsonResponse({"success": False, "error": "Вы не можете удалить этот рецепт."}, status=403)
 
     recipe.delete()
-    return JsonResponse({'success': True})
+    messages.success(request, "Ваш рецепт успешно удален!")
+
+    return JsonResponse({"success": True, "redirect_url": reverse("recipe_catalog")})
 
 @login_required
 def review_edit(request, review_id):

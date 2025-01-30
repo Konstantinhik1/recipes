@@ -363,37 +363,69 @@ function saveReview(reviewId) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-        const openModal = document.getElementById("openModal");
-        const confirmModal = document.getElementById("confirmModal2");
-        const deleteBtn = document.getElementById("deleteBtn2");
-        const cancelBtn = document.getElementById("cancelBtn2");
+    const openModal = document.getElementById("openModal");
+    const confirmModal = document.getElementById("confirmModal2");
+    const deleteBtn = document.getElementById("deleteBtn2");
+    const cancelBtn = document.getElementById("cancelBtn2");
 
-        openModal.addEventListener("click", function (event) {
-            event.preventDefault();
-            confirmModal.style.display = "block";
-        });
+    // Открываем модальное окно при клике на кнопку удаления
+    openModal.addEventListener("click", function (event) {
+        event.preventDefault();
+        confirmModal.style.display = "block";
+    });
 
-        cancelBtn2.addEventListener("click", function () {
-            confirmModal.style.display = "none";
-        });
+    // Закрываем модальное окно при клике на "Отмена"
+    cancelBtn.addEventListener("click", function () {
+        confirmModal.style.display = "none";
+    });
 
-        deleteBtn2.addEventListener("click", function () {
-            fetch("{% url 'recipe_delete' recipe.id %}", {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = "{% url 'recipe_catalog' %}";
-                } else {
-                    alert("Ошибка при удалении рецепта.");
-                }
-            });
+    // Обрабатываем удаление рецепта
+    deleteBtn.addEventListener("click", function () {
+        fetch("{% url 'recipe_delete' recipe.id %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json",
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = data.redirect_url; // Перенаправляем сразу
+            } else {
+                alert("Ошибка при удалении рецепта.");
+            }
+        })
+        .catch(error => {
+            console.error("Ошибка:", error);
+            alert("Ошибка при удалении рецепта.");
         });
     });
 
+    // Функция для показа уведомления
+    function showNotification(message) {
+        const notification = document.createElement("div");
+        notification.className = "notification";
+        notification.innerHTML = `<p class="notification-message">${message}</p>`;
+        document.body.appendChild(notification);
+
+        // Удаляем уведомление через 3 секунды
+        setTimeout(() => {
+            notification.style.animation = "fadeOut 1s forwards";
+            setTimeout(() => {
+                notification.remove();
+            }, 1000);
+        }, 3000);
+    }
+
+    // Проверяем, есть ли уведомления в messages Django
+    document.addEventListener("DOMContentLoaded", function () {
+        const notificationElement = document.getElementById("notification");
+        if (notificationElement) {
+            showNotification(notificationElement.innerText);
+        }
+    });
+});
 </script>
 </body>
 </html>
