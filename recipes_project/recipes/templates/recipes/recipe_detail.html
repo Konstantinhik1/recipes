@@ -69,16 +69,30 @@
                         {{ recipe.preparation_time }} мин.
                 </div>
                 </div>
-                <a href="{% url 'recipe_edit' recipe.id %}" class="button">
+                <div class="function">
                 {% if user.is_authenticated and user == recipe.created_by %}
-    <a href="{% url 'recipe_edit' recipe.id %}" class="add_button">
-        <img src="{% static 'recipes/img/edit.png' %}" alt="Редактировать" class="add_icon">
-        Редактировать
-    </a>
-{% endif %}
+                <a href="{% url 'recipe_edit' recipe.id %}" class="edit_button">
+                    <img src="{% static 'recipes/img/edit.png' %}" alt="Редактировать" class="add_icon">
+                    Редактировать
                 </a>
+                <a href="{% url 'recipe_delete' recipe.id %}" class="delete_button" id="openModal">
+                    <img src="{% static 'recipes/img/trash.svg' %}" alt="Редактировать" class="add_icon">
+                </a>
+                {% endif %}
+                </div>
+        </div>
 
-            </div>
+                     <!-- Модальное окно -->
+<div id="confirmModal2" class="modal" style="display: none;">
+    <div class="modal-content">
+        <p>Вы действительно хотите удалить рецепт?</p>
+        <div class="modal-buttons">
+            <button id="deleteBtn2" class="modal-button confirm">Удалить</button>
+            <button id="cancelBtn2" class="modal-button cancel">Отмена</button>
+        </div>
+    </div>
+</div>
+
         <div class="">
             <div class="subtitle">Описание</div>
             <div class="text">{{ recipe.description }}</div>
@@ -348,6 +362,37 @@ function saveReview(reviewId) {
     // Например, через AJAX запрос
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+        const openModal = document.getElementById("openModal");
+        const confirmModal = document.getElementById("confirmModal2");
+        const deleteBtn = document.getElementById("deleteBtn2");
+        const cancelBtn = document.getElementById("cancelBtn2");
+
+        openModal.addEventListener("click", function (event) {
+            event.preventDefault();
+            confirmModal.style.display = "block";
+        });
+
+        cancelBtn2.addEventListener("click", function () {
+            confirmModal.style.display = "none";
+        });
+
+        deleteBtn2.addEventListener("click", function () {
+            fetch("{% url 'recipe_delete' recipe.id %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "{% url 'recipe_catalog' %}";
+                } else {
+                    alert("Ошибка при удалении рецепта.");
+                }
+            });
+        });
+    });
 
 </script>
 </body>

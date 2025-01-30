@@ -97,6 +97,15 @@ def recipe_edit(request, recipe_id):
 
     return render(request, 'recipes/recipe_form.html', {'form': form, 'title': 'Редактировать рецепт'})
 
+@login_required
+def recipe_delete(request, recipe_id):
+    """Удаление рецепта."""
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    if recipe.created_by != request.user:
+        return HttpResponseForbidden("Вы не можете удалить этот рецепт.")
+
+    recipe.delete()
+    return JsonResponse({'success': True})
 
 @login_required
 def review_edit(request, review_id):

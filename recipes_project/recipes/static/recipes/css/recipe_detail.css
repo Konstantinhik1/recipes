@@ -232,7 +232,7 @@ html, body {
 .function {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-left: 10px;
 }
 
 .filter_form {
@@ -262,7 +262,14 @@ select:focus, select:not([value=""]) {
     color: #000;
 }
 
-.add_button {
+.function {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+}
+
+.edit_button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -279,99 +286,84 @@ select:focus, select:not([value=""]) {
     gap: 10px;
 }
 
-.add_button:hover {
+.edit_button:hover {
     background-color: #6aa200;
     border-radius: 10px;
 }
+
+.edit_button::after {
+        content: "Редактировать рецепт";
+        position: absolute;
+        bottom: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #191A1C;
+        color: #FFFFFF;
+        padding: 8px 15px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 3000;
+    }
+
+    .edit_button:hover::after {
+        opacity: 1;
+    }
+
+.delete_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        background-color: #F06858;
+        color: white;
+        padding: 10px 10px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        gap: 10px;
+        position: relative;
+    }
+
+    .delete_button:hover {
+        background-color: #DE5E50;
+        border-radius: 10px;
+    }
+
+    .delete_button::after {
+        content: "Удалить рецепт";
+        position: absolute;
+        bottom: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #191A1C;
+        color: #FFFFFF;
+        padding: 8px 15px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 3000;
+    }
+
+    .delete_button:hover::after {
+        opacity: 1;
+    }
 
 a.button {
     text-decoration: none; /* Убираем подчеркивание */
     border-radius: 10px;
 
-}
-
-@media (max-width: 768px) {
-    .filter_form {
-    flex-direction: column;
-    align-items: stretch;
-    }
-
-    .add_button {
-    width: 100%;
-    }
-}
-
-.category_select {
-    color: #C8C8C8;  /* Цвет текста, чтобы он был светлым */
-}
-
-.category_select option:disabled {
-    color: #C8C8C8; /* Тот же цвет для недоступной опции */
-}
-
-.reset_button {
-    background-color: #FF6B6B; /* Цвет для кнопки "Показать все" */
-    padding: 10px 20px;
-    border-radius: 10px;
-    color: white;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-}
-
-.reset_button:hover {
-    background-color: #e55a5a;
-}
-
-.cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-}
-
-.photo {
-    width: 300px;
-    height: 300px;
-    background: grey;
-}
-
-.name {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: left;
-    margin-top: 15px;
-}
-
-.name a {
-    text-decoration: none;
-    color: inherit; /* Наследует цвет от родительского элемента */
-}
-
-.type {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.cook_time {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.dish_type {
-    display: flex;
-    gap: 10px;
-    align-items: center;
 }
 
 .footer {
@@ -469,7 +461,7 @@ a.button {
 }
 
 .type {
-    gap: 20px;
+    gap: 10px;
     display: flex;
     align-items: center;
 }
