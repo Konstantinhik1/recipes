@@ -178,3 +178,15 @@ def update_review(request, review_id):
 
     # В случае ошибок возвращаем ошибку
     return JsonResponse({'success': False})
+
+@csrf_exempt
+def delete_image(request, recipe_id):
+    if request.method == 'POST':
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+
+        if recipe.image:
+            recipe.image.delete()  # Удаляем изображение
+            recipe.save()  # Сохраняем изменения в базе данных
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'No image found'})

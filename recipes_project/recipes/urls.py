@@ -10,4 +10,5 @@ urlpatterns = [
     path('recipe/<int:recipe_id>/delete/', views.recipe_delete, name='recipe_delete'),  # Удаление рецепта
     path('reviews/<int:review_id>/update/', views.update_review, name='review_update'),  # Редактирование отзыва
     path('review/<int:review_id>/delete/', views.review_delete, name='review_delete'),  # Удаление отзыва
+    path('delete-image/<int:recipe_id>/', views.delete_image, name='delete_image'),
 ]

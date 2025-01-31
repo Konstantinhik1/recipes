@@ -51,23 +51,110 @@
     <div class="content">
     <div class="title">{{ title }}</div>
         <div class="function">
-                <a href="{% url 'recipe_catalog' %}" class="delete_button" id="openModal">
+                <a href="{% url 'recipe_catalog' %}" class="return_button" id="openModal">
                     <img src="{% static 'recipes/img/chevron_left.svg' %}" alt="Удалить">
                     Назад
                 </a>
-                <a href="#" class="edit_button">
+                <a href="#" class="edit_button" id="saveButton">
                     <img src="{% static 'recipes/img/edit.png' %}" alt="Редактировать">
                     Сохранить
                 </a>
                 </div>
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
 
-        <button type="submit">Сохранить</button>
-    </form>
+
+
+ <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Название</label>
+                {{ form.title }}
+            </div>
+
+            <div class="form-group">
+                <label>Описание</label>
+                {{ form.description }}
+            </div>
+
+            <div class="form-group">
+                <label>Ингредиенты</label>
+                {{ form.ingredients_text }}
+            </div>
+
+            <div class="form-group">
+                <label>Шаги приготовления</label>
+                {{ form.instructions }}
+            </div>
+
+            <div class="form-group">
+                <label>Время приготовления (мин)</label>
+                {{ form.preparation_time }}
+            </div>
+
+            <div class="form-group">
+                <label>Категории</label>
+                {{ form.categories }}
+            </div>
+
+          <div class="form-group file-upload">
+    <label for="id_image" class="custom-file-input-label">
+        <span>Выберите изображение</span>
+        <input type="file" name="image" id="id_image" class="custom-file-input" accept="image/*">
+    </label>
+
+    <!-- Если изображение существует, показываем его -->
+    {% if form.instance.image %}
+        <div id="image-preview-container" class="image-preview-container">
+            <p>Текущее изображение:</p>
+            <img id="image-preview" src="{{ form.instance.image.url }}" alt="Изображение" class="image-preview">
+            <a href="#" id="remove-image" class="delete_button" data-recipe-id="{{ form.instance.id }}">
+                <img src="{% static 'recipes/img/trash.svg' %}" alt="Удалить">
+            </a>
+        </div>
+    {% else %}
+        <p class="file-name">Нет выбранного файла</p>
+    {% endif %}
 </div>
+        </form>
+
+     <div id="confirmModal2" class="modal" style="display: none;">
+    <div class="modal-content">
+        <p>Вы действительно хотите удалить рецепт?</p>
+        <div class="modal-buttons">
+            <button id="deleteBtn2" class="modal-button confirm">Удалить</button>
+            <button id="cancelBtn2" class="modal-button cancel">Отмена</button>
+        </div>
+    </div>
+</div>
+
+        <!-- Модальное окно -->
+<div id="confirmBackModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <p>Вы действительно хотите вернуться назад без сохранения изменений?</p>
+        <div class="modal-buttons">
+            <button id="confirmBackBtn" class="modal-button confirm">Вернуться</button>
+            <button id="cancelBackBtn" class="modal-button cancel">Отмена</button>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+
+
+
+<div id="logoutModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <p>Вы действительно хотите выйти из системы?</p>
+            <div class="modal-buttons">
+                <button id="confirmLogout" class="modal-button confirm">Выйти</button>
+                <button id="cancelLogout" class="modal-button cancel">Отмена</button>
+            </div>
+    </div>
+</div>
+
 
 <div class="footer">
     <div class="footer_content">
@@ -92,5 +179,228 @@
         Все права защищены
     </div>
 </div>
+{% block extra_js %}
+<script>
+       document.addEventListener("DOMContentLoaded", function () {
+        const logoutButton = document.getElementById("logoutButton");
+        const logoutModal = document.getElementById("logoutModal");
+        const confirmLogout = document.getElementById("confirmLogout");
+        const cancelLogout = document.getElementById("cancelLogout");
+
+        // Показ модального окна
+        logoutButton.addEventListener("click", function (event) {
+            event.preventDefault(); // Предотвращаем переход по ссылке
+            logoutModal.style.display = "flex";
+        });
+
+        // Подтверждение выхода
+        confirmLogout.addEventListener("click", function () {
+            window.location.href = "{% url 'logout' %}"; // Перенаправляем на страницу выхода
+        });
+
+        // Отмена выхода
+        cancelLogout.addEventListener("click", function () {
+            logoutModal.style.display = "none"; // Закрываем модальное окно
+        });
+
+        // Закрытие окна при клике вне модального окна
+        window.addEventListener("click", function (event) {
+            if (event.target === logoutModal) {
+                logoutModal.style.display = "none";
+            }
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const notification = document.getElementById("notification");
+        if (notification) {
+            // Удаляем уведомление через 3 секунды
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 3000);
+        }
+    });
+
+
+
+
+
+    document.getElementById("saveButton").addEventListener("click", function(event) {
+        event.preventDefault();  // Предотвращаем переход по ссылке
+        document.querySelector("form").submit();  // Отправляем форму
+    });
+
+// Функция для обновления имени выбранного файла и отображения изображения
+function updateFileName() {
+    const fileInput = document.getElementById("id_image");
+    const fileName = document.querySelector(".file-name");
+    const imagePreviewContainer = document.getElementById("image-preview-container");
+    const imagePreview = document.getElementById("image-preview");
+    const removeImageButton = document.getElementById("remove-image");
+
+    const file = fileInput.files[0]; // Получаем файл
+    if (file) {
+        // Отображаем имя файла
+        fileName.textContent = `Вы выбрали: ${file.name}`;
+
+        // Показываем изображение и кнопку для удаления
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result; // Загружаем изображение
+            imagePreviewContainer.style.display = 'block'; // Показываем контейнер с изображением
+        };
+        reader.readAsDataURL(file);
+
+        // Обработчик для кнопки удаления изображения
+        removeImageButton.onclick = function() {
+            fileInput.value = ''; // Очищаем input
+            fileName.textContent = 'Нет выбранного файла'; // Сбрасываем имя файла
+            imagePreviewContainer.style.display = 'none'; // Скрываем контейнер с изображением
+        };
+    } else {
+        fileName.textContent = 'Нет выбранного файла'; // Если файл не выбран
+        imagePreviewContainer.style.display = 'none'; // Скрываем контейнер с изображением
+    }
+}
+
+// Добавляем обработчик события на изменение input[type="file"]
+document.getElementById("id_image").addEventListener("change", updateFileName);
+
+// Если изображение уже выбрано (например, при редактировании), показываем его в превью
+document.addEventListener("DOMContentLoaded", function() {
+    const fileInput = document.getElementById("id_image");
+    const fileName = document.querySelector(".file-name");
+    const imagePreviewContainer = document.getElementById("image-preview-container");
+    const imagePreview = document.getElementById("image-preview");
+
+    // Если изображение уже существует (например, при редактировании)
+    if (fileInput.files.length === 0 && imagePreview.src) {
+        fileName.textContent = `Текущее изображение: ${imagePreview.src.split("/").pop()}`;
+        imagePreviewContainer.style.display = 'block'; // Показываем контейнер с изображением
+    }
+});
+
+
+
+
+
+     document.getElementById('id_image').addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Получаем выбранный файл
+        const reader = new FileReader(); // Создаем объект FileReader для чтения файла
+
+        reader.onload = function(e) {
+            // Получаем результат чтения файла (баз64 строку изображения)
+            const imageUrl = e.target.result;
+
+            // Находим элемент для изображения и заменяем его источник на новый
+            const imagePreview = document.getElementById('image-preview');
+            imagePreview.src = imageUrl;
+
+            // Показываем контейнер с изображением, если его еще нет
+            const imagePreviewContainer = document.getElementById('image-preview-container');
+            imagePreviewContainer.style.display = 'block';
+        };
+
+        // Читаем файл как URL
+        reader.readAsDataURL(file);
+    });
+
+
+// Функция для открытия модального окна
+        function openConfirmModal(event) {
+            event.preventDefault();
+            const modal = document.getElementById('confirmModal2');
+            modal.style.display = 'block';
+
+            const deleteButton = document.getElementById('deleteBtn2');
+            const cancelButton = document.getElementById('cancelBtn2');
+
+            deleteButton.onclick = function() {
+                const recipeId = event.target.closest('a').getAttribute('data-recipe-id');
+                fetch(`/delete-image/${recipeId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({ recipe_id: recipeId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        modal.style.display = 'none';
+                        document.getElementById('image-preview').src = '';
+                        document.getElementById('remove-image').style.display = 'none';
+                    } else {
+                        console.log('Ошибка удаления: ' + data.message);
+                    }
+                })
+                .catch(error => console.log('Ошибка:', error));
+            };
+
+            cancelButton.onclick = function() {
+                modal.style.display = 'none';
+            };
+        }
+
+        document.getElementById('remove-image').addEventListener('click', openConfirmModal);
+
+        function handleImageSelect(event) {
+            const fileInput = event.target;
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const imagePreview = document.getElementById('image-preview');
+                    imagePreview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+
+                const removeButton = document.getElementById('remove-image');
+                removeButton.style.display = 'block';
+            }
+        }
+
+        document.getElementById('image-input').addEventListener('change', handleImageSelect);
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+
+
+      document.getElementById('backButton').addEventListener('click', function(event) {
+        event.preventDefault();  // Отменяем стандартное действие (переход по ссылке)
+
+        const modal = document.getElementById('confirmBackModal');
+        modal.style.display = 'block';  // Показываем модальное окно
+    });
+
+    document.getElementById('cancelBackBtn').addEventListener('click', function() {
+        const modal = document.getElementById('confirmBackModal');
+        modal.style.display = 'none';  // Закрываем модальное окно
+    });
+
+    document.getElementById('confirmBackBtn').addEventListener('click', function() {
+        window.location.href = "{% url 'recipe_catalog' %}";  // Переход к списку рецептов
+    });
+</script>
+{% endblock %}
 </body>
 </html>

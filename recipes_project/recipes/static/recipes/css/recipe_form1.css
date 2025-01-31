@@ -2,6 +2,8 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    background-color: #f4f4f4;
+    color: #333;
     font-family: 'Montserrat';
 }
 
@@ -156,6 +158,44 @@ html, body {
     justify-content: center;
 }
 
+   .modal {
+        display: none; /* Скрыто по умолчанию */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4); /* Черный фон с прозрачностью */
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 400px;
+    }
+.modal-button {
+    font-family: Montserrat;
+    font-weight: bold;
+    width: 100%;
+    height: 50px;
+    padding: 10px 20px;
+    background-color: #E8691B; /* Новый цвет для кнопок в модальном окне */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 30px;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.modal-button:hover {
+    background-color: #7EB800; /* Цвет кнопки при наведении */
+}
+
 #logoutModal .modal-button {
     font-family: Montserrat;
     font-weight: bold;
@@ -222,7 +262,6 @@ html, body {
 }
 
 .title {
-    margin-top: 100px;
     font-size: 30px;
     font-weight: bold;
     text-align: left;
@@ -280,7 +319,7 @@ html, body {
         opacity: 1;
     }
 
-.delete_button {
+.return_button {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -298,12 +337,12 @@ html, body {
         position: relative;
     }
 
-    .delete_button:hover {
+    .return_button:hover {
         background-color: #C2C2C2;
         border-radius: 10px;
     }
 
-    .delete_button::after {
+    .return_button::after {
         content: "Вернуться назад";
         position: absolute;
         bottom: -40px;
@@ -322,7 +361,7 @@ html, body {
         z-index: 3000;
     }
 
-    .delete_button:hover::after {
+    .return_button:hover::after {
         opacity: 1;
     }
 
@@ -388,3 +427,312 @@ a.button {
     margin-top: 30px; /* отступ сверху */
 }
 
+
+    label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+
+    input, textarea, select {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #A5A5A5;
+        border-radius: 4px;
+    }
+
+/* Стили для чекбоксов */
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1px solid #DFE4EA;
+    opacity: 1;
+    appearance: none;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff; /* белый фон */
+}
+
+/* Стили для активного состояния чекбокса */
+input[type="checkbox"]:checked {
+    background: #0077FF;
+    border: 1px solid;
+    border-image-source: linear-gradient(224.16deg, #FFFFFF -38.31%, rgba(255, 255, 255, 0) 75.05%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Добавляем псевдоэлемент для отображения галочки */
+input[type="checkbox"]:checked::after {
+    content: "";
+    display: block;
+    width: 8px; /* Ширина галочки */
+    height: 4px; /* Высота галочки */
+    border-left: 2px solid white; /* Левый угол галочки */
+    border-bottom: 2px solid white; /* Нижний угол галочки */
+    transform: rotate(-45deg); /* Поворот, чтобы сделать галочку */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg); /* Центрируем и поворачиваем галочку */
+}
+
+/* Улучшение внешнего вида чекбокса при наведении */
+input[type="checkbox"]:hover {
+    border-color: #005BB5; /* При наведении изменяется цвет границы */
+}
+
+input.form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+input.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+button.btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+}
+
+button.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Стили для поля загрузки файла */
+.custom-file-input {
+    display: none; /* Скрыть стандартную кнопку ввода */
+}
+
+.custom-file-input + label {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    width: auto;
+}
+
+.custom-file-input + label:hover {
+    background-color: #45a049;
+}
+
+/* Стили для отображения имени выбранного файла */
+.custom-file-input:valid + label::after {
+    content: 'Изображение выбрано';
+    font-size: 14px;
+    color: #f0f0f0;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-input-label {
+    background-color: #7EB800;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.custom-file-input-label:hover {
+    background-color: #6aa200;
+}
+
+.file-name {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #777;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.submit-button, .back-button {
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    color: white;
+    background-color: #7EB800;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.submit-button:hover, .back-button:hover {
+    background-color: #6aa200;
+}
+
+.footer {
+    background-color: #191A1C;
+    color: white;
+    padding: 50px 120px;
+    text-align: center;
+}
+
+.footer_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer_content img {
+    width: 50px;
+}
+
+.links a {
+    color: white;
+    text-decoration: none;
+    margin: 5px;
+}
+
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-control:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.file-name {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.image-preview-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Чтобы изображение занимало весь контейнер и не искажалось */
+    border-radius: 10px; /* Если нужно скругление углов */
+}
+
+
+.file-name {
+    font-size: 14px;
+    color: #777;
+    margin-top: 8px;
+}
+
+.delete_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #F06858;
+    color: white;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    position: absolute; /* Позиционируем кнопку относительно контейнера изображения */
+    bottom: -20px; /* Расположим кнопку на 10px от нижнего края изображения */
+    right: 10px; /* Расположим кнопку на 10px от правого края изображения */
+    z-index: 2; /* Чтобы кнопка была поверх изображения */
+}
+
+.delete_button:hover {
+    background-color: #DE5E50;
+}
+
+.delete_button img {
+    width: 24px; /* Размер иконки */
+    height: 24px; /* Размер иконки */
+}
+
+.delete_button::after {
+    content: "Удалить рецепт";
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #191A1C;
+    color: #FFFFFF;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 3000;
+}
+
+.delete_button:hover::after {
+    opacity: 1;
+}
+
+.confirm {
+    background-color: green;
+    color: white;
+}
+
+.cancel {
+    background-color: red;
+    color: white;
+}

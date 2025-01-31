@@ -3,7 +3,6 @@ html, body {
     padding: 0;
     height: 100%;
     font-family: 'Montserrat';
-    overflow-x: hidden; /* Отключаем горизонтальную прокрутку */
 }
 
 .menu {
@@ -683,6 +682,5 @@ button.save-button {
 button.save-button:hover {
     background: #6CA800;
 }
-
 
 

@@ -12,12 +12,22 @@ class RecipeForm(forms.ModelForm):
 
     class Meta:
         model = Recipe
-        fields = ['title', 'description', 'ingredients_text', 'instructions', 'preparation_time', 'image', 'categories']
+        fields = ['title', 'description', 'ingredients_text', 'instructions', 'preparation_time', 'categories', 'image']
+        labels = {
+            'title': 'Название',
+            'description': 'Описание',
+            'ingredients_text': 'Ингредиенты',
+            'instructions': 'Шаги приготовления',
+            'preparation_time': 'Время приготовления (мин)',
+            'image': 'Изображение',
+            'categories': 'Категории',
+        }
         widgets = {
             'instructions': forms.Textarea(attrs={
                 'rows': 5,
                 'placeholder': 'Введите шаги приготовления, разделяя их новой строкой'
             }),
+            'image': forms.ClearableFileInput(attrs={'class': 'custom-file-input'}),
         }
 
 
