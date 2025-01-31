@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="{% static 'recipes/css/recipe_form.css' %}"/>
+    <link rel="stylesheet" href="{% static 'recipes/css/recipe_form1.css' %}"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -49,8 +49,17 @@
 
 
     <div class="content">
-    <div class="title">{{ recipe.title }}</div>
-    <h1>{{ title }}</h1>
+    <div class="title">{{ title }}</div>
+        <div class="function">
+                <a href="{% url 'recipe_catalog' %}" class="delete_button" id="openModal">
+                    <img src="{% static 'recipes/img/chevron_left.svg' %}" alt="Удалить">
+                    Назад
+                </a>
+                <a href="#" class="edit_button">
+                    <img src="{% static 'recipes/img/edit.png' %}" alt="Редактировать">
+                    Сохранить
+                </a>
+                </div>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -58,11 +67,8 @@
 
         <button type="submit">Сохранить</button>
     </form>
-
-    <a href="{% url 'recipe_catalog' %}">Назад к каталогу</a>
-
-
 </div>
+
 <div class="footer">
     <div class="footer_content">
         <div class="image">

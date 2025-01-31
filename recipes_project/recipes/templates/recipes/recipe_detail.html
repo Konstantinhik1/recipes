@@ -72,11 +72,11 @@
                 <div class="function">
                 {% if user.is_authenticated and user == recipe.created_by %}
                 <a href="{% url 'recipe_edit' recipe.id %}" class="edit_button">
-                    <img src="{% static 'recipes/img/edit.png' %}" alt="Редактировать" class="add_icon">
+                    <img src="{% static 'recipes/img/edit.png' %}" alt="Редактировать">
                     Редактировать
                 </a>
                 <a href="{% url 'recipe_delete' recipe.id %}" class="delete_button" id="openModal">
-                    <img src="{% static 'recipes/img/trash.svg' %}" alt="Редактировать" class="add_icon">
+                    <img src="{% static 'recipes/img/trash.svg' %}" alt="Удалить">
                 </a>
                 {% endif %}
                 </div>
