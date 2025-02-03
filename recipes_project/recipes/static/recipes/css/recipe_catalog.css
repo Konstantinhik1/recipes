@@ -251,7 +251,6 @@ select {
     -moz-appearance: none;
     -webkit-appearance: none;
     background-color: white;
-    background-image: url('{% static "recipes/img/chaverlodot_down.svg" %}');
     background-repeat: no-repeat;
     background-position: calc(100% - 10px) center;
     background-size: 16px;
