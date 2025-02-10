@@ -1,0 +1,21 @@
+services:
+  app:
+    build:
+      dockerfile: ./Dockerfile
+    command:
+      - gunicorn
+      - recipes_project.wsgi:application
+      - --bind
+      - "0.0.0.0:8000"
+    ports:
+      - "8080:8000"  # Порт хоста:порт контейнера
+    restart: always
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "200k"
+    volumes:
+      - ./recipes_project/database/app/database:/app/database  # Убедитесь, что путь корректен
